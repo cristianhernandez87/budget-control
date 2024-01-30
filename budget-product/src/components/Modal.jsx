@@ -1,15 +1,16 @@
 import { useState } from "react";
+import Message from "./Message"
 
-function Modal({setModal}) {
+function Modal({setModal, saveExpend }) {
 
     const [ name, setName ] = useState('')
-    const [ amount, setAmount ] = useState(0)
+    const [ amount, setAmount ] = useState('')
     const [ category, setCategory ] = useState('')
-    const [ expense, setExpense ] = useState([])
+
+    const [ message, setMessage ] = useState('')
 
     const closeModal = e => {
         e.preventDefault();
-        console.log('closeModal')
         setModal(false)
     }
 
@@ -17,9 +18,19 @@ function Modal({setModal}) {
         e.preventDefault();
         
         if ([name,amount,category].includes('')) {
-            console.log('fail')
+            setMessage('fail')
+
+            setTimeout(() => {
+                setMessage('')
+            }, 3000)
             return 
         }
+
+        saveExpend ({name, amount, category})
+        console.log(category)
+        setName('')
+        setAmount('')
+        setCategory('')
     }
 
     return (
@@ -32,6 +43,7 @@ function Modal({setModal}) {
                 <form
                     onSubmit={handleSubmit}
                 >
+                    { message && <Message tipo="alert-danger text-center p-1">{message}</Message>}
                     <div className="form-group mb-4">
                         <label htmlFor="name" className="d-block mb-2 w-100">Name expense</label>
                         <input
@@ -51,8 +63,7 @@ function Modal({setModal}) {
                             className="form-control"
                             placeholder="amount"
                             value={amount}
-                            onChange={e => setAmount(e.target.amount)}
-                            // value={expense}
+                            onChange={e => setAmount(Number(e.target.value))}
                         />
                     </div>
                     <div className="form-group mb-4">
@@ -61,7 +72,7 @@ function Modal({setModal}) {
                             id="category"
                             className="form-control"
                             value={category}
-                            onChange={e => setCategory(e.target.category)}
+                            onChange={e => setCategory(e.target.value)}
                         >
                             <option value="select">Select</option>
                             <option value="save">Save</option>

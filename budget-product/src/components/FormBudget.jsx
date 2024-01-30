@@ -25,6 +25,7 @@ function FormBudget({
         setMessage('')
         setIsValidBudget(true)
         onBudgetSubmit(budget)
+        // setBudget('')
     }
 
     return (
