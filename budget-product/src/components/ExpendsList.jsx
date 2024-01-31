@@ -1,6 +1,6 @@
 import Expend from "./Expend"
 
-function ExpendsList({expends}) {
+function ExpendsList({expends, setExpendEdit}) {
   return (
     <div className="W-100 mb-34">
         <p className="text-center">{ expends.length ? 'Gastos' :  'No gastos'}</p>
@@ -8,6 +8,7 @@ function ExpendsList({expends}) {
             <Expend
                 key={expend.id}
                 expend={expend}
+                setExpendEdit={setExpendEdit}
             />
         ))}
     </div>

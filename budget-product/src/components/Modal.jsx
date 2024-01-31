@@ -1,17 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Message from "./Message"
 
-function Modal({setModal, saveExpend }) {
+function Modal({setModal, saveExpend, expendEdit }) {
 
     const [ name, setName ] = useState('')
     const [ amount, setAmount ] = useState('')
     const [ category, setCategory ] = useState('')
-
     const [ message, setMessage ] = useState('')
+    const [ id, setId ] = useState('')
+    const [ date, setDate ] = useState('')
 
     const closeModal = e => {
         e.preventDefault();
         setModal(false)
+        setName('')
+        setAmount('')
+        setCategory('')
     }
 
     const handleSubmit = e => {
@@ -26,20 +30,32 @@ function Modal({setModal, saveExpend }) {
             return 
         }
 
-        saveExpend ({name, amount, category})
-        console.log(category)
+        saveExpend ({name, amount, category, id, date})
         setName('')
         setAmount('')
         setCategory('')
     }
 
+
+    useEffect(() => {
+        if(Object.keys(expendEdit).length > 0 ) {
+            setName(expendEdit.name)
+            setAmount(expendEdit.amount)
+            setCategory(expendEdit.category)
+            setId(expendEdit.id)
+            setDate(expendEdit.date)
+            console.log(expendEdit)
+        }
+    },[])
+
     return (
-        <div className="col-10 col-lg-4 mx-auto p-3 text-center">
+        <div className="col-10 col-lg-4 mx-auto p-3 text-center align-content-center d-flex flex-wrap justify-content-between">
+            {expendEdit.name ? (<p className="display-4 mb-0">Edit</p>) : (<p className="display-4 mb-0">New</p>)}
             <button
                 className="btn btn-danger mb-3"
                 onClick={closeModal}
             >X</button>
-            <div className="alert alert-primary">
+            <div className="alert alert-primary col-12">
                 <form
                     onSubmit={handleSubmit}
                 >
@@ -85,7 +101,7 @@ function Modal({setModal, saveExpend }) {
                             id="submit"
                             type="submit"
                             className="form-control btn btn-warning"
-                            value="Add new"
+                            value={expendEdit ? 'Edit' : 'Add new'}
                         />
                     </div>
                 </form>

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Header from './components/Header'
 import FormBudget from './components/FormBudget'
 import ControlBudget from './components/ControlBudget'
@@ -12,6 +12,7 @@ function App() {
   const [ isValidBudget, setIsValidBudget ] = useState(false)
   const [ modal, setModal ] = useState(false)
   const [ expends, setExpends] = useState([])
+  const [ expendEdit, setExpendEdit] = useState({})
 
   const handleBudgetSubmit = (enteredBudget) => {
     setBudget(enteredBudget);
@@ -19,16 +20,29 @@ function App() {
   };
 
   const handdleNewExpend = () => {
-    console.log('click modal')
     setModal(true);
+    setExpendEdit({})
   }
 
   const saveExpend = expend => {
-    expend.id = getId()
-    expend.fecha  = Date.now()
-    setExpends([...expends, expend])
+    if(expend.id) {
+      const expendUpdated = expends.map( expendState => expendState.id === expend.id ? expend : expendState ) 
+      setExpends(expendUpdated)
+
+    } else {
+      expend.id = getId()
+      expend.date  = Date.now()
+      setExpends([...expends, expend])
+    }
+
     setModal(false)
   }
+
+  useEffect(() => {
+    if(Object.keys(expendEdit).length > 0) {
+      setModal(true);
+    }
+  },[expendEdit])
 
   return (
     <>
@@ -46,8 +60,10 @@ function App() {
 
             { modal && <Modal
                           saveExpend={saveExpend}
-                          setModal={setModal}/>
-                        }
+                          setModal={setModal}
+                          expendEdit={expendEdit}
+                      />
+                    }
           <hr />
           <div className="col-12 col-lg-6 mx-lg-auto">
               { isValidBudget ? 
@@ -60,7 +76,8 @@ function App() {
                       expends={expends}
                     />
                     <ExpendsList
-                      expends={expends }
+                      expends={expends}
+                      setExpendEdit={setExpendEdit}
                     />
                   </>
                 ) : (
