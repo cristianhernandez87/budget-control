@@ -30,24 +30,24 @@ function ControlBudget({budget, setIsValidBudget, setBudget, expends, setExpends
 
   return (
     <div className="w-100 d-flex flex-wrap">
-      <div className="col-12 col-md-6 mb-3 mb-md-0">
+      <div className="col-12 col-md-6 col-lg-4 mb-3 mb-md-0">
         <CircularProgressbar
           value={porcental}
           text={`${porcental}% Gastado`}
           styles={buildStyles({
+            pathColor: porcental > 100 ? 'red' : '#3B82F6',
             textSize: '10px',
-            pathColor: '#3B82F6'
           })}
         />
       </div>
-      <div className="col-12 col-md-6 mb-3 mb-md-0">
+      <div className="col-12 col-md-6 col-lg-8 mb-3 mb-md-0">
         <button
           onClick={resetApp}
           className="btn btn-danger w-100 mb-4"
         >Reset APP</button>
         <ul className="list">
           <li className="item"><p><strong>Budget</strong> {resetBudget(budget)}</p></li>
-          <li className="item"><p><strong>Available</strong> {resetBudget(available)}</p></li>
+          <li className={`${available < 0 ? 'item alert alert-danger p-2 mb-2' : 'item'}`}><p className={`${available < 0 ? 'mb-0' : ''}`}><strong>Available</strong> {resetBudget(available)}</p></li>
           <li className="item"><p><strong>Expend</strong> {resetBudget(expended)}</p></li>
         </ul>
       </div>

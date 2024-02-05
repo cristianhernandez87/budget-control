@@ -5,6 +5,7 @@ import ControlBudget from './components/ControlBudget'
 import Modal from './components/Modal'
 import ExpendsList from './components/ExpendsList'
 import { getId } from './helpers'; 
+import Filter from './components/Filter'
 
 function App() {
 
@@ -18,6 +19,8 @@ function App() {
     localStorage.getItem('expends') ? JSON.parse(localStorage.getItem('expends')) : []
   )
   const [ expendEdit, setExpendEdit] = useState({})
+  const [ filters, setFilters ] = useState('')
+  const [ expendsFilter, setExpendsFilters ] = useState([])
 
   const handleBudgetSubmit = (enteredBudget) => {
     setBudget(enteredBudget);
@@ -63,6 +66,13 @@ function App() {
   }, [expends])
 
   useEffect(() => {
+    if(filters){
+      const expendsFilter = expends.filter(expends => expends.category === filters)
+      setExpendsFilters(expendsFilter)
+    }
+  },[filters])
+
+  useEffect(() => {
     const budgetLS = Number(localStorage.getItem('budget')) ?? 0
 
     if(budgetLS > 0) {
@@ -104,10 +114,17 @@ function App() {
                       expendEdit={expendEdit}
                       setExpends={setExpends}
                     />
+                    <Filter
+                      filters={filters}
+                      setFilters={setFilters}
+
+                    />
                     <ExpendsList
                       expends={expends}
                       setExpendEdit={setExpendEdit}
                       deleteExpend={deleteExpend}
+                      filters={filters}
+                      expendsFilter={expendsFilter}
                     />
                   </>
                 ) : (

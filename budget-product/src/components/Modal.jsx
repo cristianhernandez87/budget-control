@@ -91,7 +91,7 @@ function Modal({setModal, saveExpend, expendEdit, setExpendEdit }) {
                             value={category}
                             onChange={e => setCategory(e.target.value)}
                         >
-                            <option value="select">Select</option>
+                            <option value="">Select</option>
                             <option value="save">Save</option>
                             <option value="car">Car</option>
                             <option value="cool">Cool</option>
