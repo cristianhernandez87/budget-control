@@ -14,11 +14,8 @@ function FormBudget({
 
     const haddleBudget = (e) => {
         e.preventDefault();
-        console.log('llega al form')
-
         if(!Number(budget) || Number(budget) < 0) {
             setMessage('No available budget, try again.')
-
             return
         }
 
@@ -26,6 +23,8 @@ function FormBudget({
         setIsValidBudget(true)
         onBudgetSubmit(budget)
         // setBudget('')
+
+        console.log(budget)
     }
 
     return (

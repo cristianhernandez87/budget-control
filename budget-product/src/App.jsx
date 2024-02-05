@@ -8,10 +8,15 @@ import { getId } from './helpers';
 
 function App() {
 
-  const [ budget, setBudget ] = useState(0)
+  const [ budget, setBudget ] = useState(
+    localStorage.getItem('budget') ?? 0
+  )
+  
   const [ isValidBudget, setIsValidBudget ] = useState(false)
   const [ modal, setModal ] = useState(false)
-  const [ expends, setExpends] = useState([])
+  const [ expends, setExpends] = useState(
+    localStorage.getItem('expends') ? JSON.parse(localStorage.getItem('expends')) : []
+  )
   const [ expendEdit, setExpendEdit] = useState({})
 
   const handleBudgetSubmit = (enteredBudget) => {
@@ -28,7 +33,7 @@ function App() {
     if(expend.id) {
       const expendUpdated = expends.map( expendState => expendState.id === expend.id ? expend : expendState ) 
       setExpends(expendUpdated)
-
+      setExpendEdit({})
     } else {
       expend.id = getId()
       expend.date  = Date.now()
@@ -38,11 +43,32 @@ function App() {
     setModal(false)
   }
 
+  const deleteExpend = id => {
+    const expendsUpdated = expends.filter(expends => expends.id !== id)
+    setExpends(expendsUpdated)
+  }
+
   useEffect(() => {
     if(Object.keys(expendEdit).length > 0) {
       setModal(true);
     }
   },[expendEdit])
+
+  useEffect(() => {
+    localStorage.setItem('budget', budget ?? 0)
+  },[budget])
+
+  useEffect(() => {
+    localStorage.setItem('expends', JSON.stringify(expends) ?? [])
+  }, [expends])
+
+  useEffect(() => {
+    const budgetLS = Number(localStorage.getItem('budget')) ?? 0
+
+    if(budgetLS > 0) {
+      setIsValidBudget(true)
+    }
+  },[])
 
   return (
     <>
@@ -62,6 +88,7 @@ function App() {
                           saveExpend={saveExpend}
                           setModal={setModal}
                           expendEdit={expendEdit}
+                          setExpendEdit={setExpendEdit}
                       />
                     }
           <hr />
@@ -74,10 +101,13 @@ function App() {
                       budget={budget}
                       setBudget={setBudget}
                       expends={expends}
+                      expendEdit={expendEdit}
+                      setExpends={setExpends}
                     />
                     <ExpendsList
                       expends={expends}
                       setExpendEdit={setExpendEdit}
+                      deleteExpend={deleteExpend}
                     />
                   </>
                 ) : (

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Message from "./Message"
 
-function Modal({setModal, saveExpend, expendEdit }) {
+function Modal({setModal, saveExpend, expendEdit, setExpendEdit }) {
 
     const [ name, setName ] = useState('')
     const [ amount, setAmount ] = useState('')
@@ -16,6 +16,7 @@ function Modal({setModal, saveExpend, expendEdit }) {
         setName('')
         setAmount('')
         setCategory('')
+        setExpendEdit({})
     }
 
     const handleSubmit = e => {
@@ -101,7 +102,7 @@ function Modal({setModal, saveExpend, expendEdit }) {
                             id="submit"
                             type="submit"
                             className="form-control btn btn-warning"
-                            value={expendEdit ? 'Edit' : 'Add new'}
+                            value={expendEdit.name ? 'Edit' : 'Add new'}
                         />
                     </div>
                 </form>
